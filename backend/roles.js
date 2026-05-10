@@ -1,0 +1,6 @@
+const ROLES = {
+  SUPER_ADMIN: "SUPER_ADMIN",
+  ORG_ADMIN: "ORGANIZATION_ADMIN",
+};
+
+export default ROLES;

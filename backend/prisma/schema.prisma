@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ORGANIZATION_ADMIN
+}
+
+// Organization Model - Stores unique id and name of organization
+model Organization{
+  id Int    @id @default(autoincrement())
+  name String @unique
+}
+
+// User model - Stores unique id, email, password, role, organization reference of Organization Admins
+model User {
+  id Int    @id @default(autoincrement())
+  email String     @unique
+  password String
+  role Role 
+  organizationId Int
+  organization Organization    @relation(fields: [organizationId], references: [id])
+}
+
+// Feature Flag Model - Stores unique id, featureKey value, name (I-friendly), enables (ON/OFF), organization reference of features
+model FeatureFlag {
+  id Int     @id @default(autoincrement())
+  featureKey String 
+  name String
+  enabled Boolean
+  organizationId Int
+  organization Organization     @relation(fields: [organizationId], references: [id])
+
+  // organization cannot have same feature key
+  @@unique([featureKey, organizationId]) 
+}
