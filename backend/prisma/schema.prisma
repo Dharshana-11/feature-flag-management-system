@@ -21,6 +21,9 @@ enum Role {
 model Organization{
   id Int    @id @default(autoincrement())
   name String @unique
+
+  users        User[] 
+  featureFlags FeatureFlag[]
 }
 
 // User model - Stores unique id, email, password, role, organization reference of Organization Admins
